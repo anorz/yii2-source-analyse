@@ -194,8 +194,7 @@ abstract class Application extends Module
      */
     public function __construct($config = [])
     {
-
-
+        //$this 为 yii\web\Application
         Yii::$app = $this;
 
         //相当于  $this->loadedModules[get_class($this)] = $this;
@@ -206,8 +205,7 @@ abstract class Application extends Module
         //加载 web.php 和 coreComponent 的配置
         $this->preInit($config);
 
-        $this->registerErrorHandler($config);
-
+//        $this->registerErrorHandler($config);
         Component::__construct($config);
     }
 

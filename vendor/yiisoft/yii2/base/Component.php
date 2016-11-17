@@ -160,15 +160,18 @@ class Component extends Object
      * @throws UnknownPropertyException if the property is not defined
      * @throws InvalidCallException if the property is read-only.
      * @see __get()
+     *
+     *
+     * 在Yii::configure($this, $config) 中，调用该方法设置 config
      */
     public function __set($name, $value)
     {
 
         $setter = 'set' . $name;
+
         if (method_exists($this, $setter)) {
             // set property
             $this->$setter($value);
-
             return;
         } elseif (strncmp($name, 'on ', 3) === 0) {
             // on event: attach event handler
