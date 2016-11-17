@@ -511,6 +511,7 @@ class BaseYii
     }
 
     /**
+     * 调用 Object 的 __set 方法，将 config 配置到
      * Configures an object with the initial property values.
      * @param object $object the object to be configured
      * @param array $properties the property initial values given in terms of name-value pairs.
@@ -521,7 +522,6 @@ class BaseYii
         foreach ($properties as $name => $value) {
             $object->$name = $value;
         }
-
         return $object;
     }
 

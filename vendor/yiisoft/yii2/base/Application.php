@@ -194,11 +194,16 @@ abstract class Application extends Module
      */
     public function __construct($config = [])
     {
+
+
         Yii::$app = $this;
+
+        //相当于  $this->loadedModules[get_class($this)] = $this;
         static::setInstance($this);
 
         $this->state = self::STATE_BEGIN;
 
+        //加载 web.php 和 coreComponent 的配置
         $this->preInit($config);
 
         $this->registerErrorHandler($config);
@@ -213,6 +218,8 @@ abstract class Application extends Module
      * If you override this method, please make sure you call the parent implementation.
      * @param array $config the application configuration
      * @throws InvalidConfigException if either [[id]] or [[basePath]] configuration is missing.
+     *
+     * config 前面加 & ,表示，parInit中 $config 的变化会保存
      */
     public function preInit(&$config)
     {
@@ -249,6 +256,12 @@ abstract class Application extends Module
         }
 
         // merge core components with custom components
+        //合并处理后 所以的 component['{id}'] 都是 一个 包含 'class'的数组
+        //例如 "log" => array:3 [▼
+                            //      "traceLevel" => 3
+                            //      "targets" => array:1 [▶]
+                            //      "class" => "yii\log\Dispatcher"
+                            //]
         foreach ($this->coreComponents() as $id => $component) {
             if (!isset($config['components'][$id])) {
                 $config['components'][$id] = $component;
@@ -360,36 +373,37 @@ abstract class Application extends Module
     }
 
     /**
+     * 运行应用之前先运行 __construct 方法
      * Runs the application.
      * This is the main entrance of an application.
      * @return integer the exit status (0 means normal, non-zero values mean abnormal)
      */
     public function run()
     {
-        try {
-
-            $this->state = self::STATE_BEFORE_REQUEST;
-            $this->trigger(self::EVENT_BEFORE_REQUEST);
-
-            $this->state = self::STATE_HANDLING_REQUEST;
-            $response = $this->handleRequest($this->getRequest());
-
-            $this->state = self::STATE_AFTER_REQUEST;
-            $this->trigger(self::EVENT_AFTER_REQUEST);
-
-            $this->state = self::STATE_SENDING_RESPONSE;
-            $response->send();
-
-            $this->state = self::STATE_END;
-
-            return $response->exitStatus;
-
-        } catch (ExitException $e) {
-
-            $this->end($e->statusCode, isset($response) ? $response : null);
-            return $e->statusCode;
-
-        }
+//        try {
+//
+//            $this->state = self::STATE_BEFORE_REQUEST;
+//            $this->trigger(self::EVENT_BEFORE_REQUEST);
+//
+//            $this->state = self::STATE_HANDLING_REQUEST;
+//            $response = $this->handleRequest($this->getRequest());
+//
+//            $this->state = self::STATE_AFTER_REQUEST;
+//            $this->trigger(self::EVENT_AFTER_REQUEST);
+//
+//            $this->state = self::STATE_SENDING_RESPONSE;
+//            $response->send();
+//
+//            $this->state = self::STATE_END;
+//
+//            return $response->exitStatus;
+//
+//        } catch (ExitException $e) {
+//
+//            $this->end($e->statusCode, isset($response) ? $response : null);
+//            return $e->statusCode;
+//
+//        }
     }
 
     /**

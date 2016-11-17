@@ -163,6 +163,7 @@ class Component extends Object
      */
     public function __set($name, $value)
     {
+
         $setter = 'set' . $name;
         if (method_exists($this, $setter)) {
             // set property
