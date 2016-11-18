@@ -98,12 +98,14 @@ class Object implements Configurable
      * - call the parent implementation at the end of the constructor.
      *
      * @param array $config name-value pairs that will be used to initialize the object properties
+     *
+     * 该构造函数，的调用流程，先是 Yii.php 中 Yii::$container = new yii\di\Container(); 调用
+     *                         再是  yii\base\Application 中  Component::__construct($config) 调用
      */
     public function __construct($config = [])
     {
         if (!empty($config)) {
-            //Component::__construct($config);
-            //$this 参数 为 Component
+            //Component::__construct($config)时 $this 参数 为 yii\web\Application
             Yii::configure($this, $config);
         }
         $this->init();

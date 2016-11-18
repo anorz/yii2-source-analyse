@@ -204,9 +204,11 @@ abstract class Application extends Module
 
         //加载 web.php 和 coreComponent 的配置
         $this->preInit($config);
+        $this->registerErrorHandler($config);
 
-//        $this->registerErrorHandler($config);
+        //直接使用父类的类名引用,则在所有父类中 $this对用的都是 index.php 中的 (new yii\web\Application($config)) 实例
         Component::__construct($config);
+
     }
 
     /**
@@ -305,10 +307,10 @@ abstract class Application extends Module
                 }
             }
         }
-
         foreach ($this->bootstrap as $class) {
             $component = null;
             if (is_string($class)) {
+                //判断是否 $this->_definitions[$class] 存在
                 if ($this->has($class)) {
                     $component = $this->get($class);
                 } elseif ($this->hasModule($class)) {
@@ -378,30 +380,30 @@ abstract class Application extends Module
      */
     public function run()
     {
-//        try {
-//
-//            $this->state = self::STATE_BEFORE_REQUEST;
-//            $this->trigger(self::EVENT_BEFORE_REQUEST);
-//
-//            $this->state = self::STATE_HANDLING_REQUEST;
-//            $response = $this->handleRequest($this->getRequest());
-//
-//            $this->state = self::STATE_AFTER_REQUEST;
-//            $this->trigger(self::EVENT_AFTER_REQUEST);
-//
-//            $this->state = self::STATE_SENDING_RESPONSE;
-//            $response->send();
-//
-//            $this->state = self::STATE_END;
-//
-//            return $response->exitStatus;
-//
-//        } catch (ExitException $e) {
-//
-//            $this->end($e->statusCode, isset($response) ? $response : null);
-//            return $e->statusCode;
-//
-//        }
+        try {
+
+            $this->state = self::STATE_BEFORE_REQUEST;
+            $this->trigger(self::EVENT_BEFORE_REQUEST);
+
+            $this->state = self::STATE_HANDLING_REQUEST;
+            $response = $this->handleRequest($this->getRequest());
+
+            $this->state = self::STATE_AFTER_REQUEST;
+            $this->trigger(self::EVENT_AFTER_REQUEST);
+
+            $this->state = self::STATE_SENDING_RESPONSE;
+            $response->send();
+
+            $this->state = self::STATE_END;
+
+            return $response->exitStatus;
+
+        } catch (ExitException $e) {
+
+            $this->end($e->statusCode, isset($response) ? $response : null);
+            return $e->statusCode;
+
+        }
     }
 
     /**

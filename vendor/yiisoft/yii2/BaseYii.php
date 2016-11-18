@@ -511,11 +511,19 @@ class BaseYii
     }
 
     /**
-     * 调用 Component 的 __set 方法，将 config 配置到
      * Configures an object with the initial property values.
      * @param object $object the object to be configured
      * @param array $properties the property initial values given in terms of name-value pairs.
      * @return object the object itself
+     *
+     * $properties : array:5 [▼
+                "id" => "basic"                    ----> yii\base\Module             : public $id ;
+                "bootstrap" => array:3 [▶]         ----> yii\base\Application        : public $bootstrap = [];
+                "components" => array:15 [▶]       ----> yii\base\ ServiceLocator    :setComponents
+                "params" => array:1 [▶]            ----> yii\base\Module             : public $params = [ ];
+                "modules" => array:2 [▶]           ----> yii\base\Module : setModules
+            ]
+     * $object :   为 app\web\Application 实例
      */
     public static function configure($object, $properties)
     {

@@ -124,7 +124,6 @@ class ServiceLocator extends Component
         if (isset($this->_components[$id])) {
             return $this->_components[$id];
         }
-
         if (isset($this->_definitions[$id])) {
             $definition = $this->_definitions[$id];
             if (is_object($definition) && !$definition instanceof Closure) {
@@ -251,6 +250,14 @@ class ServiceLocator extends Component
      * ```
      *
      * @param array $components component definitions or instances
+     *
+     * 设置组件
+     * $_definitions[$id] = $component;
+     * 例如 数组
+     * $_definitions['request'] = ["cookieValidationKey" => "mWBXEVPwhFw04y6eSOGzLL98wUIPW5zY"
+                                    "class" => "yii\web\Request"];
+     * 或者 匿名函数
+     * $_definitions['xx'] = function(){};
      */
     public function setComponents($components)
     {

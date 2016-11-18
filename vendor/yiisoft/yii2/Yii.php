@@ -24,4 +24,8 @@ class Yii extends \yii\BaseYii
 
 spl_autoload_register(['Yii', 'autoload'], true, true);
 Yii::$classMap = require(__DIR__ . '/classes.php');
+
+/**
+ * 在这步: 调用了 yii\base\Object 的 __construct
+ */
 Yii::$container = new yii\di\Container();
